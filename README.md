@@ -1,18 +1,15 @@
-# Word Heist
-A browser-based multiplayer word-search survival game for 2–8 people. No accounts or API keys needed.
+# Word Heist v3
 
-## Run locally
-Install Node.js 20 or newer, then run `npm install` and `npm start`. Open http://localhost:3000. Join using a second browser or private window (each player needs a separate browser storage session). Run `npm test` for the puzzle and combat unit tests.
+Real-time browser word-search combat for 2–8 players. Node 20+, Express and Socket.IO.
 
-## Publish on GitHub and Render
-1. Create an empty GitHub repository and upload the contents of this directory (not the outer folder). Commit the files. Do not upload node_modules.
-2. On https://render.com create a **Web Service**, connect the repository, and select Node as the runtime. Build command: `npm install`. Start command: `npm start`. Health check path: `/health`. Alternatively use the included render.yaml with a Render Blueprint.
-3. Deploy, open the public URL and share it with friends. Test a complete match from separate browsers/devices before inviting a wider audience.
+## Run / deploy
 
-This needs a persistent Node server supporting WebSockets. GitHub Pages alone cannot run it. A single service instance is required; rooms are stored in process memory and disappear if the server restarts or sleeps. Hosting costs and free-tier limits depend on the provider. Use HTTPS in production.
+`npm install`, `npm test`, `npm start`. Open http://localhost:3000. On Render create a Node Web Service from your GitHub repository, build `npm install`, start `npm start`, health check `/health`. Use a single server instance; rooms are in memory. GitHub Pages alone cannot host the backend.
 
-## Rules (v2)
-- Shared 10×10 grid, 10 target words, 45 seconds per round. First valid claim wins globally. Claimed word cells turn grey for everyone; overlapping cells remain selectable. Only generated target words count.
-- Each claim requires an immediate choice: attack a living opponent for 1 HP, gain a persistent one-hit shield, or heal 1 HP (up to starting HP). While choosing, that player cannot claim another word. Others continue playing. Decisions resolve immediately and are public in the battle log.
-- Starting HP: 10, 13, 15, 18, 20, 23, 25 for 2–8 players. Health and shields persist. At timeout, unused claims become shields. Eliminated players spectate. All words claimed and rewards spent ends the round early. Last survivor wins; after ten rounds highest HP wins, ties shared.
-- Server serializes claims and validates paths and outcomes. No external API required. Single server instance, in-memory lobbies, casual MVP; test live multiplayer and balance before public release. Original unit tests cover puzzle generation and legacy combat only.
+## Rules
+
+Ten target words per 10×10 puzzle; first valid claim wins, grey letters can overlap other words. No puzzle timer or round limit. When all words are claimed or all living players vote to skip, outstanding rewards resolve, then the next puzzle starts after a four-second solution reveal. A claim cancels that player's skip vote. Rewards default to one shield after 20 seconds. Global consecutive claims multiply attack power (1,2,3,...), reset by another claimant or a new puzzle. Shield and healing rewards always worth one. Shields and health carry over. Starting health is 30 + 5 per additional player above two. Shields capped at starting health. No friendly fire. Host selects solo, balanced random teams (size differs by at most one), or custom teams (host assigns players). Last surviving player/team wins. Final leaderboard ranks by survival, then elimination order, damage and words. Disconnection grace period 60 seconds; then forfeit. No accounts or external API.
+
+## Testing / limitations
+
+Syntax checks and existing puzzle generation tests run locally. Live multiplayer, mobile interaction and balancing need deployment playtesting. There is no persistent database; server restart loses matches. Defence-heavy matches may last indefinitely. Custom teams can be uneven. Only trusted server validates intended words; accidental dictionary words are not targets.
