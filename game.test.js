@@ -1,0 +1,3 @@
+const {test}=require('node:test'),assert=require('node:assert/strict'),{puzzle,resolve}=require('./game');
+test('100 puzzles contain ten unique valid target words',()=>{for(let i=0;i<100;i++){let p=puzzle();assert.equal(p.grid.length,10);assert.equal(new Set(p.words).size,10);for(let w of p.words){assert.ok(p.paths[w].length);for(let path of p.paths[w])assert.equal(path.map(i=>p.grid.flat()[i]).join(''),w)}}});
+test('simultaneous elimination and shields',()=>{let p=[{id:'a',name:'A',hp:2,plan:{attacks:{b:3},shield:0}},{id:'b',name:'B',hp:2,plan:{attacks:{a:2},shield:1}}];let r=resolve(p);assert.deepEqual(p.map(x=>x.hp),[0,0]);assert.equal(r.results[1].blocked,1);assert.equal(r.events.length,2)});
