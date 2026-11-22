@@ -11,12 +11,8 @@ Install Node.js 20 or newer, then run `npm install` and `npm start`. Open http:/
 
 This needs a persistent Node server supporting WebSockets. GitHub Pages alone cannot run it. A single service instance is required; rooms are stored in process memory and disappear if the server restarts or sleeps. Hosting costs and free-tier limits depend on the provider. Use HTTPS in production.
 
-## Rules
-- 10×10 grid, 10 target words, 45 seconds per puzzle. Words may run in any of eight directions. Only generated target words count; accidental words do not. Each distinct target counts once per player.
-- Starting health: ceil(10 × (1 + 0.25 × (starting players − 2))). For 2 through 8 players: 10, 13, 15, 18, 20, 23, 25 HP respectively. Health persists between rounds.
-- 20 seconds to allocate all earned points: one point attacks one opponent for one HP or blocks one incoming damage. No healing in this release. Unsubmitted plans default to shielding. Attacks are simultaneous, including attacks from players eliminated in that reveal.
-- Last survivor wins; after ten rounds highest health wins (ties shared). All eliminated means draw. Eliminated players spectate. Reveal lasts eight seconds.
-- Private lobby code and invite link. Reconnect using the same browser session. Leaving forfeits at round resolution. Voice negotiation can happen outside the game.
-
-## Architecture and limitations
-Express serves the client; Socket.IO synchronises lobby and round state. The server validates all word paths, allocations and deadlines. Puzzle generation is local using a built-in English vocabulary. Solutions and opponent plans are withheld until reveal. This is a casual MVP, not a hardened ranked service: dictionary is small, automated solvers are possible, there is no persistence, authentication, moderation or distributed scaling. Test balance and deployment before public release. Dependencies must be installed on a network-connected machine; commit the generated package-lock.json after installation for reproducible builds.
+## Rules (v2)
+- Shared 10×10 grid, 10 target words, 45 seconds per round. First valid claim wins globally. Claimed word cells turn grey for everyone; overlapping cells remain selectable. Only generated target words count.
+- Each claim requires an immediate choice: attack a living opponent for 1 HP, gain a persistent one-hit shield, or heal 1 HP (up to starting HP). While choosing, that player cannot claim another word. Others continue playing. Decisions resolve immediately and are public in the battle log.
+- Starting HP: 10, 13, 15, 18, 20, 23, 25 for 2–8 players. Health and shields persist. At timeout, unused claims become shields. Eliminated players spectate. All words claimed and rewards spent ends the round early. Last survivor wins; after ten rounds highest HP wins, ties shared.
+- Server serializes claims and validates paths and outcomes. No external API required. Single server instance, in-memory lobbies, casual MVP; test live multiplayer and balance before public release. Original unit tests cover puzzle generation and legacy combat only.
