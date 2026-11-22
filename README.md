@@ -1,4 +1,4 @@
-# Word Heist v5.0
+# Word Heist v5.2
 
 Real-time browser word-search combat for 2–8 players. Node 20+, Express and Socket.IO.
 
@@ -8,7 +8,7 @@ Real-time browser word-search combat for 2–8 players. Node 20+, Express and So
 
 ## Rules
 
-Ten target words of 4–10 letters per 10×10 puzzle; first valid claim wins, coloured letters can overlap other words. No puzzle timer or round limit. When all words are claimed or all living players vote to skip, outstanding rewards resolve, then the next puzzle starts after a four-second solution reveal. A claim cancels that player's skip vote. Rewards default to recovery after 20 seconds: heal one HP, or gain one shield only when already at full health. Global consecutive claims multiply attack power (1,2,4,8,...), persist across boards and reset only by another claimant. Round damage doubles at rounds 5, 7, 9 and every two rounds thereafter, capped at 1024× to keep arithmetic safe. Attack power is fixed at claim time; streak power is capped at 2^20 for safe arithmetic. Each player has a stable unique colour; overlapping claims show stripes of each owner colour. Recovery is always worth one. Base attack damage is word length minus three, multiplied by streak and round multipliers. Shields and health carry over. Starting health is 30 + 5 per additional player above two. Shields capped at starting health. No friendly fire. Host selects solo, balanced random teams (size differs by at most one), or custom teams (host assigns players). Last surviving player/team wins. Final leaderboard ranks by survival, then elimination order, damage and words. Disconnection grace period 60 seconds; then forfeit. No accounts or external API.
+Ten target words of 4–10 letters per 10×10 puzzle; first valid claim wins, coloured letters can overlap other words. No puzzle timer or round limit. When all words are claimed or all living players vote to skip, outstanding rewards resolve, then the next puzzle starts after a four-second solution reveal. A claim cancels that player's skip vote. Rewards default to recovery after 20 seconds: restore missing HP, then convert remaining power to shields. Global consecutive claims multiply attack power (1,2,4,8,...), persist across boards and reset only by another claimant. There is no round multiplier or sudden death. Attack power is fixed at claim time; streak power is capped at 2^20 for safe arithmetic. Each player has a stable unique colour; overlapping claims show stripes of each owner colour. Attack and recovery share the same power: word length minus three, multiplied by the streak multiplier. Healing caps at full HP; excess healing becomes shields up to the shield cap. Shields and health carry over. Starting health is 30 + 5 per additional player above two. Shields capped at starting health. No friendly fire. Host selects solo, balanced random teams (size differs by at most one), or custom teams (host assigns players). Last surviving player/team wins. Final leaderboard ranks by survival, then elimination order, damage and words. Disconnection grace period 60 seconds; then forfeit. No accounts or external API.
 
 ## Testing / limitations
 
@@ -17,3 +17,6 @@ Syntax checks and existing puzzle generation tests run locally. Live multiplayer
 ## Vocabulary and guide
 
 The bundled 5,000-word list is frequency-selected from TextBlob en-spelling (based on public-domain books and frequency lists; https://norvig.com/big.txt), cross-checked against CMUdict, with the original game words retained and a basic exclusion filter. Not manually curated; some names, inflections, dated or unfamiliar terms may remain. No runtime dictionary dependency. The mobile-friendly guide is at /guide.html and includes an interactive practice board and damage calculator. Successful personal claims animate with reduced-motion support.
+
+## Rematches
+The host can play again after a match ends with at least two connected players. Match health, shields, streaks and match statistics reset; the same room and colours remain. Random teams reshuffle; custom teams retain assignments. Lobby leaderboard ranks by cumulative earned power, then wins, actual HP damage, words and name. Departed players retain their scores until room deletion. Explicit last-player departure deletes the room; disconnected players have a 60-second grace period. Server restarts clear all scores.
