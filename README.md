@@ -16,7 +16,7 @@ Syntax checks and existing puzzle generation tests run locally. Live multiplayer
 
 ## Vocabulary and guide
 
-The bundled 5,000-word list is frequency-selected from TextBlob en-spelling (based on public-domain books and frequency lists; https://norvig.com/big.txt), cross-checked against CMUdict, with the original game words retained and a basic exclusion filter. Not manually curated; some names, inflections, dated or unfamiliar terms may remain. No runtime dictionary dependency. The mobile-friendly guide is at /guide.html and includes an interactive practice board and damage calculator. Successful personal claims animate with reduced-motion support.
+The bundled word list has been replaced with a smaller, hand-selected family-oriented list of 774 recognisable words (4–10 letters). This is intentionally smaller than the previous unreviewed 5,000-word list. New boards balance word lengths, avoid overlapping target words, and verify that every target has exactly one matching path. The guide is at /guide.html.
 
 ## Rematches
 The host can play again after a match ends with at least two connected players. Match health, shields, streaks and match statistics reset; the same room and colours remain. Random teams reshuffle; custom teams retain assignments. Lobby leaderboard ranks by cumulative earned power, then wins, actual HP damage, words and name. Departed players retain their scores until room deletion. Explicit last-player departure deletes the room; disconnected players have a 60-second grace period. Server restarts clear all scores.
